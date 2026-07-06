@@ -1,96 +1,37 @@
 # product_metrics_analysis
+SQL-проект по продуктовой аналитике на PostgreSQL.
+В проекте рассчитаны ключевые метрики продукта: **funnel**, **Day 7 retention** и **ARPU** на основе e-commerce датасета.
 
-## Цель проекта
-Сделать учебный SQL-проект по продуктовой аналитике и показать базовые метрики продукта на одном датасете:
-- funnel;
-- retention;
-- ARPU.
+## Стек
+- PostgreSQL
+- SQL
+- DBeaver
+- Ubuntu Linux
 
-Проект моделирует поведение пользователей в небольшом e-commerce продукте, где есть регистрация, просмотр товара, добавление в корзину и покупка.
-
-## Структура проекта
-```text
-product_metrics_analysis/
-├── dataset/
-│   ├── users.csv
-│   ├── events.csv
-│   └── payments.csv
-├── sql/
-│   ├── 01_schema.sql
-│   ├── 02_load_data.sql
-│   ├── 03_funnel.sql
-│   ├── 04_retention.sql
-│   ├── 05_arpu.sql
-│   └── 06_arpu_by_channel.sql
-└── README.md
-```
-
-## Датасет
-В проекте используется сгенерированный dataset из 3 таблиц:
-
-### `users`
-- `user_id` — идентификатор пользователя
-- `signup_date` — дата регистрации
-- `acquisition_channel` — канал привлечения
-
-### `events`
-- `event_id` — идентификатор события
-- `user_id` — идентификатор пользователя
-- `event_name` — тип события (`signup`, `view_product`, `add_to_cart`, `purchase`)
-- `event_time` — дата и время события
-
-### `payments`
-- `payment_id` — идентификатор платежа
-- `user_id` — идентификатор пользователя
-- `payment_time` — дата и время оплаты
-- `amount` — сумма платежа
+## Что внутри
+- `dataset/` — исходные CSV-данные
+- `sql/` — SQL-запросы для расчёта метрик
+- `results/` — результаты запросов и скриншоты
 
 ## Метрики
+- Funnel: `signup -> view_product -> add_to_cart -> purchase`
+- Retention: Day 7 retention
+- ARPU: средняя выручка на пользователя
+- ARPU by channel: ARPU по каналам привлечения
 
-### 1. Funnel
-Воронка строится по шагам:
-`signup -> view_product -> add_to_cart -> purchase`
+## Примеры результатов
 
-Что считаем:
-- количество уникальных пользователей на каждом этапе;
-- конверсию от первого шага;
-- точки максимального оттока.
+### Funnel
+![Funnel result](results/funnel_screenshot.png)
 
-### 2. Retention
-Используется метрика **Day 7 Retention**.
+### Retention
+![Retention result](results/retention_screenshot.png)
 
-Retention Day 7 показывает, какая доля пользователей вернулась в продукт через 7 дней после регистрации и совершила любое событие.
+### ARPU by channel
+![ARPU by channel result](results/arpu_by_channel_screenshot.png)
 
-### 3. ARPU
-**ARPU (Average Revenue Per User)** считается по формуле:
-
-`ARPU = total revenue / total users`
-
-Метрика показывает, сколько выручки в среднем приносит один пользователь.
-
-## SQL-файлы
-- `01_schema.sql` — создание таблиц;
-- `02_load_data.sql` — загрузка CSV в PostgreSQL;
-- `03_funnel.sql` — анализ воронки;
-- `04_retention.sql` — расчет retention Day 7;
-- `05_arpu.sql` — общий ARPU;
-- `06_arpu_by_channel.sql` — ARPU по каналам привлечения.
-
-## Как запускать
-1. Создать таблицы из `sql/01_schema.sql`.
-2. Положить CSV-файлы в папку `dataset/`.
-3. Выполнить `sql/02_load_data.sql`.
-4. По очереди запускать аналитические SQL-файлы.
-
-## Примеры выводов
-После выполнения запросов можно сделать такие выводы:
-- на каждом следующем шаге funnel часть пользователей отваливается;
-- retention помогает понять, возвращаются ли пользователи после регистрации;
-- ARPU показывает среднюю ценность одного пользователя;
-- сравнение ARPU по каналам помогает понять, какие источники трафика дают более ценных пользователей.
-
-## Идеи для улучшения
-- добавить conversion rate между соседними шагами funnel;
+## Вывод
+Проект демонстрирует работу с SQL, PostgreSQL, CTE, `JOIN`, агрегатными и оконными функциями в задачах продуктовой аналитики.
 - посчитать retention не только Day 7, но и Day 1 / Day 30;
 - добавить ARPPU;
 - построить сегментацию по каналам привлечения;
